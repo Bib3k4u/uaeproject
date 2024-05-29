@@ -169,6 +169,23 @@ app.post('/login', async (req, res) => {
   }
 });
 
+
+app.get('/pdf/:id', async (req, res) => {
+  try {
+    const pdf = await Pdf.findByPk(req.params.id);
+
+    if (!pdf) {
+      return res.status(404).json({ message: 'PDF not found' });
+    }
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.send(pdf.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 // Sync database and start server
 sequelize.sync()
   .then(() => {
